@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Create a header line for the CSV file
+echo "Server Name,Last Installed Kernel,Uptime" > server_summary.csv
+
+# Loop over the servers in the "server" file
+while read -r i; do
+  # Run the commands on the remote server and capture the output
+  a=$(ssh -o StrictHostKeyChecking=no -o ConnectTimeout=2 -o BatchMode=yes -p 77 -i sysadm Si "rpm -qa-last kernel | head -1")
+  b=$(ssh -o StrictHostKeyChecking=no -o ConnectTimeout=2 -o BatchMode=yes -p 77 -i sysadm Si uptime)
+  
+  # Print the summary line and append it to the CSV file
+  echo "$i,$a,$b" >> server_summary.csv
+done < server
