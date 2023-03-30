@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# Define input file containing server names
+input_file="server_list.txt"
+
+# Define output file name
+output_file="server_stats.csv"
+
+# Write header row to output file
+echo "Server Name,Kernel Version,Last Boot Time,Uptime" > $output_file
+
+# Loop through servers in input file
+while read server_name || [ -n "$server_name" ]
+do
+    # Attempt to connect to server
+    if ssh -q $server_name exit; then
+        # Retrieve kernel version and last boot time
+        kernel_version=$(ssh $server_name "rpm -qa --last kernel | head -n 1")
+        last_boot_time=$(echo $kernel_version | awk '{print $5, $6, $7, $8}')
+
+        # Retrieve uptime
+        uptime=$(ssh $server_name "uptime")
+
+        # Parse uptime to extract only the relevant information
+        uptime_days=$(echo $uptime | awk '{print $3}')
+        uptime_hours=$(echo $uptime | awk '{print $5}' | awk -F: '{print $1}')
+        uptime_minutes=$(echo $uptime | awk '{print $5}' | awk -F: '{print $2}')
+
+        # Write server stats to output file
+        echo "$server_name,$kernel_version,$last_boot_time,$uptime_days days, $uptime_hours hours, $uptime_minutes minutes" >> $output_file
+    else
+        # Server is not reachable, add to output file with N/A values
+        echo "$server_name,N/A,N/A,N/A" >> $output_file
+    fi
+done < $input_file
