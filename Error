@@ -36,3 +36,4 @@ while IFS= read -r server; do
     ping_output=$(ssh_ping_server "$server")
     echo "$server, \"$telnet_80\", \"$telnet_8443\", \"$ping_output\"" >> $output_file
 done < "$input_file"
+
