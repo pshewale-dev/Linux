@@ -1,40 +1,49 @@
-#!/bin/bash
+import subprocess
+import socket
 
-# Output CSV file name
-output_file="command_output.csv"
+def ping(host):
+    # Ping the host using the system's ping command
+    command = ['ping', '-c', '4', host]  # Change '-c' value to adjust the number of pings
+    result = subprocess.run(command, stdout=subprocess.PIPE)
+    output = result.stdout.decode('utf-8')
 
-# Create CSV file and add header
-printf "Server IP,Ping 1.1.1.2,Ping 1.2.3.4,Telnet 1.2.3.4 80,Telnet 1.2.3.4 8443\n" > "$output_file"
+    # Check the output for successful ping
+    if ' 0% packet loss' in output:
+        return True
+    else:
+        return False
 
-# Read server IP addresses from a text file
-server_file="servers.txt"
-while IFS= read -r server_ip; do
-    echo "Executing commands on $server_ip"
+def telnet(host, port):
+    # Create a TCP socket and attempt to connect to the host and port
+    try:
+        socket.create_connection((host, port), timeout=5)
+        return True
+    except (ConnectionRefusedError, socket.timeout):
+        return False
 
-    # Execute commands using SSH with passwordless authentication
-    ssh -p 77 -o StrictHostKeyChecking=no -o ConnectTimeout=5 sysadm@$server_ip << EOF
+# Read hosts from text file
+with open('hosts.txt', 'r') as file:
+    hosts = file.read().splitlines()
 
-        # Command 1: Ping 1.1.1.2
-        echo "Running: Ping 1.1.1.2"
-        ping_output_1_1_1_2=$(ping 1.1.1.2 | tr -s ' ' | cut -d ' ' -f 8-)
-        
-        # Command 2: Ping 1.2.3.4
-        echo "Running: Ping 1.2.3.4"
-        ping_output_1_2_3_4=$(ping 1.2.3.4 | tr -s ' ' | cut -d ' ' -f 8-)
+# Example usage
+for host in hosts:
+    print(f"Testing connectivity for {host}:")
+    
+    if ping(host):
+        print("Ping test successful")
+    else:
+        print("Ping test failed")
+    
+    port1 = 80
+    if telnet(host, port1):
+        print(f"Telnet test successful on port {port1}")
+    else:
+        print(f"Telnet test failed on port {port1}")
+    
+    port2 = 443
+    if telnet(host, port2):
+        print(f"Telnet test successful on port {port2}")
+    else:
+        print(f"Telnet test failed on port {port2}")
 
-        # Command 3: Telnet 1.2.3.4 80
-        echo "Running: Telnet 1.2.3.4 80"
-        telnet_output_80=$(telnet 1.2.3.4 80 | tr -s ' ' | cut -d ' ' -f 2-)
-
-        # Command 4: Telnet 1.2.3.4 8443
-        echo "Running: Telnet 1.2.3.4 8443"
-        telnet_output_8443=$(telnet 1.2.3.4 8443 | tr -s ' ' | cut -d ' ' -f 2-)
-
-        printf "%s,%s,%s,%s,%s\n" "$server_ip" "$ping_output_1_1_1_2" "$ping_output_1_2_3_4" "$telnet_output_80" "$telnet_output_8443" >> "$output_file"
-
-EOF
-
-    echo "Commands executed on $server_ip"
-done < "$server_file"
-
-echo "Command output saved in $output_file"
+    print()  # Print a blank line between each host
