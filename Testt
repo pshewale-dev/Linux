@@ -1,53 +1,48 @@
 #!/bin/bash
 
-# Input file containing the list of servers (one per line)
-input_file="server_list.txt"
-
 # Output CSV file
 output_file="server_output.csv"
 
-# SSH username
-username="your_username"
-
-# Telnet function over SSH
-ssh_telnet_server() {
+# Telnet function
+telnet_server() {
     local server=$1
     local port=$2
     # Replace the command below with your desired telnet command
-    # Example: ssh $username@$server "telnet $server $port"
-    ssh $username@$server "telnet $server $port" 2>&1
+    # Example: telnet $server $port
+    telnet $server $port 2>&1
 }
 
-# SSH ping function
-ssh_ping_server() {
+# Ping function
+ping_server() {
     local server=$1
     # Replace the command below with your desired ping command
-    # Example: ssh $username@$server "ping -c 4 $server"
-    ssh $username@$server "ping -c 4 $server" 2>&1
+    # Example: ping -c 4 $server
+    ping -c 4 $server 2>&1
 }
 
 # Create or truncate the output CSV file
-echo "Server, Telnet 80, Telnet 8443, Ping, SSH Status" > $output_file
+echo "Server, Telnet 80, Telnet 8443, Ping" > $output_file
 
-# Read each server from the input file
-while IFS= read -r server; do
-    # Check if SSH connection is successful
-    ssh_status=$(ssh -q -o BatchMode=yes -o ConnectTimeout=5 $username@$server echo ok 2>&1)
+# Telnet to server 10.246.215.117 on port 80
+telnet_80=$(telnet_server "10.246.215.117" 80)
 
-    if [[ $ssh_status == "ok" ]]; then
-        telnet_80=$(ssh_telnet_server "$server" 80)
-        telnet_8443=$(ssh_telnet_server "$server" 8443)
-        ping_output=$(ssh_ping_server "$server")
+# Telnet to server 10.246.215.117 on port 8443
+telnet_8443=$(telnet_server "10.246.215.117" 8443)
 
-        # Check if both Telnet and Ping were successful
-        if [[ "$telnet_80" == *"Connected"* && "$telnet_8443" == *"Connected"* && "$ping_output" == *"bytes from"* ]]; then
-            status="OK"
-        else
-            status="NO KO"
-        }
+# Ping server 10.246.215.117
+ping_output_1=$(ping_server "10.246.215.117")
 
-        echo "$server, \"$telnet_80\", \"$telnet_8443\", \"$ping_output\", \"$status\"" >> $output_file
-    else
-        echo "$server, \"SSH Not OK\", \"\", \"\", \"\"" >> $output_file
-    fi
-done < "$input_file"
+# Add server 10.246.215.117 results to the output CSV file
+echo "10.246.215.117, \"$telnet_80\", \"$telnet_8443\", \"$ping_output_1\"" >> $output_file
+
+# Telnet to server 10.246.211.157 on port 80
+telnet_80=$(telnet_server "10.246.211.157" 80)
+
+# Telnet to server 10.246.211.157 on port 8443
+telnet_8443=$(telnet_server "10.246.211.157" 8443)
+
+# Ping server 10.246.211.157
+ping_output_2=$(ping_server "10.246.211.157")
+
+# Add server 10.246.211.157 results to the output CSV file
+echo "10.246.211.157, \"$telnet_80\", \"$telnet_8443\", \"$ping_output_2\"" >> $output_file
