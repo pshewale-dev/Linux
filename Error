@@ -1,35 +1,38 @@
 #!/bin/bash
 
-# Define input file containing server names
-input_file="servers.txt"
+# Input file containing the list of servers (one per line)
+input_file="server_list.txt"
 
-# Define output file name
-output_file="server_stats.csv"
+# Output CSV file
+output_file="server_output.csv"
 
-# Write header row to temporary output file
-echo "Server Name,Kernel Version,Last Boot Time,Uptime" > "$output_file.tmp"
+# SSH username
+username="your_username"
 
-# Loop through servers in input file
-while read -r server_name; do
-  # Try to connect to server with SSH and retrieve kernel version and last boot time
-  if ssh -o BatchMode=yes -o ConnectTimeout=10 -o StrictHostKeyChecking=no -o User=sysadm -p 66 "$server_name" "rpm -qa --last kernel | head -n 1" >/dev/null 2>&1; then
-    # Connection succeeded, so retrieve kernel version and last boot time
-    kernel_version=$(ssh -o BatchMode=yes -o ConnectTimeout=10 -o StrictHostKeyChecking=no -o User=sysadm -p 66 "$server_name" "rpm -qa --last kernel | head -n 1" || true)
-    last_boot_time=$(echo "$kernel_version" | awk '{print $5, $6, $7, $8}')
-    # Try to retrieve uptime
-    uptime=$(ssh -o BatchMode=yes -o ConnectTimeout=10 -o StrictHostKeyChecking=no -o User=sysadm -p 66 "$server_name" "uptime" || true)
-    uptime_days=$(echo "$uptime" | awk '{print $3}')
-    uptime_hours=$(echo "$uptime" | awk '{print $5}' | awk -F: '{print $1}')
-    uptime_minutes=$(echo "$uptime" | awk '{print $5}' | awk -F: '{print $2}')
-    echo "$server_name,$kernel_version,$last_boot_time,$uptime_days days, $uptime_hours hours, $uptime_minutes minutes" >> "$output_file.tmp"
-  else
-    # Connection failed, so add a "Not Reachable" message for this server
-    echo "$server_name,Not Reachable,Not Reachable,Not Reachable" >> "$output_file.tmp"
-  fi
-done < "$input_file" || true
+# Telnet function over SSH
+ssh_telnet_server() {
+    local server=$1
+    local port=$2
+    # Replace the command below with your desired telnet command
+    # Example: ssh $username@$server "telnet $server $port"
+    ssh $username@$server "telnet $server $port" 2>&1
+}
 
-# Append contents of temporary output file to final output file
-cat "$output_file.tmp" >> "$output_file"
+# SSH ping function
+ssh_ping_server() {
+    local server=$1
+    # Replace the command below with your desired ping command
+    # Example: ssh $username@$server "ping -c 4 $server"
+    ssh $username@$server "ping -c 4 $server" 2>&1
+}
 
-# Remove temporary output file
-rm "$output_file.tmp"
+# Create or truncate the output CSV file
+echo "Server, Telnet 80, Telnet 8443, Ping" > $output_file
+
+# Read each server from the input file
+while IFS= read -r server; do
+    telnet_80=$(ssh_telnet_server "$server" 80)
+    telnet_8443=$(ssh_telnet_server "$server" 8443)
+    ping_output=$(ssh_ping_server "$server")
+    echo "$server, \"$telnet_80\", \"$telnet_8443\", \"$ping_output\"" >> $output_file
+done < "$input_file"
