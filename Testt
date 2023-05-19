@@ -27,20 +27,27 @@ ssh_ping_server() {
 }
 
 # Create or truncate the output CSV file
-echo "Server, Telnet 80, Telnet 8443, Ping, Status" > $output_file
+echo "Server, Telnet 80, Telnet 8443, Ping, SSH Status" > $output_file
 
 # Read each server from the input file
 while IFS= read -r server; do
-    telnet_80=$(ssh_telnet_server "$server" 80)
-    telnet_8443=$(ssh_telnet_server "$server" 8443)
-    ping_output=$(ssh_ping_server "$server")
+    # Check if SSH connection is successful
+    ssh_status=$(ssh -q -o BatchMode=yes -o ConnectTimeout=5 $username@$server echo ok 2>&1)
 
-    # Check if both Telnet and Ping were successful
-    if [[ "$telnet_80" == *"Connected"* && "$telnet_8443" == *"Connected"* && "$ping_output" == *"bytes from"* ]]; then
-        status="OK"
+    if [[ $ssh_status == "ok" ]]; then
+        telnet_80=$(ssh_telnet_server "$server" 80)
+        telnet_8443=$(ssh_telnet_server "$server" 8443)
+        ping_output=$(ssh_ping_server "$server")
+
+        # Check if both Telnet and Ping were successful
+        if [[ "$telnet_80" == *"Connected"* && "$telnet_8443" == *"Connected"* && "$ping_output" == *"bytes from"* ]]; then
+            status="OK"
+        else
+            status="NO KO"
+        }
+
+        echo "$server, \"$telnet_80\", \"$telnet_8443\", \"$ping_output\", \"$status\"" >> $output_file
     else
-        status="NO KO"
-    }
-
-    echo "$server, \"$telnet_80\", \"$telnet_8443\", \"$ping_output\", \"$status\"" >> $output_file
+        echo "$server, \"SSH Not OK\", \"\", \"\", \"\"" >> $output_file
+    fi
 done < "$input_file"
