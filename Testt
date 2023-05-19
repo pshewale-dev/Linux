@@ -1,92 +1,46 @@
+#!/bin/bash
 
-Disk Addition Request Issues.
+# Input file containing the list of servers (one per line)
+input_file="server_list.txt"
 
+# Output CSV file
+output_file="server_output.csv"
 
-prashant@shewale.xyz
+# SSH username
+username="your_username"
 
-Request for Disk Addition
+# Telnet function over SSH
+ssh_telnet_server() {
+    local server=$1
+    local port=$2
+    # Replace the command below with your desired telnet command
+    # Example: ssh $username@$server "telnet $server $port"
+    ssh $username@$server "telnet $server $port" 2>&1
+}
 
+# SSH ping function
+ssh_ping_server() {
+    local server=$1
+    # Replace the command below with your desired ping command
+    # Example: ssh $username@$server "ping -c 4 $server"
+    ssh $username@$server "ping -c 4 $server" 2>&1
+}
 
-prashant@shewale.xyz
-Rewrite the mail
+# Create or truncate the output CSV file
+echo "Server, Telnet 80, Telnet 8443, Ping, Status" > $output_file
 
-Hello Rahul ,
-We created the reuqest as per suggestion by the VMware team .
- Find the belwo request for refrence.
+# Read each server from the input file
+while IFS= read -r server; do
+    telnet_80=$(ssh_telnet_server "$server" 80)
+    telnet_8443=$(ssh_telnet_server "$server" 8443)
+    ping_output=$(ssh_ping_server "$server")
 
-Also on my last two request both person aksed me the all details and justification after providing the all neasssey detials and they agreeed for the disk addition after one day they released that typology is incorrect rejected the request . That both person not awareness of the this point.
+    # Check if both Telnet and Ping were successful
+    if [[ "$telnet_80" == *"Connected"* && "$telnet_8443" == *"Connected"* && "$ping_output" == *"bytes from"* ]]; then
+        status="OK"
+    else
+        status="NO KO"
+    }
 
-Also current task i informed vikhil that as person suggested by sunjay i created task .but he  in  mode to listen  me and rejected the task.
-
-Overall my  observation it seems to VMware team not sync about the porcess. 
-
-I gree misunderstanding happened  it but 3 times  we can't 3 times misunderstanding happened.
-
-1 / 2
-
-
-Dear Rahul,
-
-I am writing to follow up on a request that we had submitted earlier based on the suggestion of the VMware team. Please find the request details below for your reference.
-
-However, I wanted to bring to your attention some issues that we have been facing with regards to the disk addition requests. In the last two requests, the persons handling the request had initially agreed to the disk addition after reviewing all the necessary details and justifications provided. However, after a day, they rejected the requests citing incorrect typology. It seems that they were not fully aware of this point.
-
-Furthermore, I had informed Vikhil about the current task and created the task as per the suggestion of Sunjay. However, Vikhil did not seem to be interested in listening to me and rejected the task.
-
-In my observation, it appears that the VMware team may not be fully in sync about the process. While I understand that misunderstandings can happen, it is concerning that we have faced such issues three times now.
-
-I would appreciate it if you could look into this matter and ensure that the necessary steps are taken to avoid such situations in the future.
-
-Thank you for your attention to this matter.
-
-Best regards,
-Prashant Shewale
-
-
-
-
-
-prashant@shewale.xyz
-Correct the  grammar only
-
-Please provide the text that needs to be corrected, and I will be happy to assist you with correcting its grammar.
-
-
-
-
-
-prashant@shewale.xyz
-
-Request for Disk Addition
-
-
-prashant@shewale.xyz
-Rewrite the mail
-
-Hello Rahul ,
-We created the reuqest as per suggestion by the VMware team .
- Find the belwo request for refrence.
-
-Also on my last two request both person aksed me the all details and justification after providing the all neasssey detials and they agreeed for the disk addition after one day they released that typology is incorrect rejected the request . That both person not awareness of the this point.
-
-Also current task i informed vikhil that as person suggested by sunjay i created task .but he  in  mode to listen  me and rejected the task.
-
-Overall my  observation it seems to VMware team not sync about the porcess. 
-
-I gree misunderstanding happened  it but 3 times  we can't 3 times misunderstanding happened.
-
-Hello Rahul,
-
-We created the request as per the suggestion by the VMware team. Please find the below request for reference.
-
-On my last two requests, both persons asked me for all the necessary details and justification. After providing all the required details, they agreed to the disk addition. However, after a day, they released that the typology is incorrect and rejected the request. It seems that both persons were not aware of this point.
-
-Regarding the current task, I informed Vikhil that I created the task as per the suggestion by Sunjay. However, Vikhil did not seem to be interested in listening to me and rejected the task.
-
-Overall, my observation is that the VMware team is not in sync about the process. I agree that misunderstandings can happen, but we cannot afford three misunderstandings.
-
-Thank you.
-
-
-
-
+    echo "$server, \"$telnet_80\", \"$telnet_8443\", \"$ping_output\", \"$status\"" >> $output_file
+done < "$input_file"
