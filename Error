@@ -1,5 +1,6 @@
 import subprocess
 import socket
+import pandas as pd
 
 def ping(host):
     # Ping the host using the system's ping command
@@ -25,25 +26,16 @@ def telnet(host, port):
 with open('hosts.txt', 'r') as file:
     hosts = file.read().splitlines()
 
-# Example usage
+# Perform tests and store results
+results = []
 for host in hosts:
-    print(f"Testing connectivity for {host}:")
-    
-    if ping(host):
-        print("Ping test successful")
-    else:
-        print("Ping test failed")
-    
-    port1 = 80
-    if telnet(host, port1):
-        print(f"Telnet test successful on port {port1}")
-    else:
-        print(f"Telnet test failed on port {port1}")
-    
-    port2 = 443
-    if telnet(host, port2):
-        print(f"Telnet test successful on port {port2}")
-    else:
-        print(f"Telnet test failed on port {port2}")
+    ping_result = ping(host)
+    telnet_result1 = telnet(host, 80)
+    telnet_result2 = telnet(host, 443)
+    results.append((host, ping_result, telnet_result1, telnet_result2))
 
-    print()  # Print a blank line between each host
+# Create a DataFrame from the results
+df = pd.DataFrame(results, columns=['Host', 'Ping', 'Telnet Port 80', 'Telnet Port 443'])
+
+# Save the DataFrame to an Excel file
+df.to_excel('network_test_results.xlsx', index=False)
