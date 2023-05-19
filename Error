@@ -1,39 +1,40 @@
 #!/bin/bash
 
-# Input file containing the list of servers (one per line)
-input_file="server_list.txt"
+# Output CSV file name
+output_file="command_output.csv"
 
-# Output CSV file
-output_file="server_output.csv"
+# Create CSV file and add header
+printf "Server IP,Ping 1.1.1.2,Ping 1.2.3.4,Telnet 1.2.3.4 80,Telnet 1.2.3.4 8443\n" > "$output_file"
 
-# SSH username
-username="your_username"
+# Read server IP addresses from a text file
+server_file="servers.txt"
+while IFS= read -r server_ip; do
+    echo "Executing commands on $server_ip"
 
-# Telnet function over SSH
-ssh_telnet_server() {
-    local server=$1
-    local port=$2
-    # Replace the command below with your desired telnet command
-    # Example: ssh $username@$server "telnet $server $port"
-    ssh $username@$server "telnet $server $port" 2>&1
-}
+    # Execute commands using SSH with passwordless authentication
+    ssh -p 77 -o StrictHostKeyChecking=no -o ConnectTimeout=5 sysadm@$server_ip << EOF
 
-# SSH ping function
-ssh_ping_server() {
-    local server=$1
-    # Replace the command below with your desired ping command
-    # Example: ssh $username@$server "ping -c 4 $server"
-    ssh $username@$server "ping -c 4 $server" 2>&1
-}
+        # Command 1: Ping 1.1.1.2
+        echo "Running: Ping 1.1.1.2"
+        ping_output_1_1_1_2=$(ping 1.1.1.2 | tr -s ' ' | cut -d ' ' -f 8-)
+        
+        # Command 2: Ping 1.2.3.4
+        echo "Running: Ping 1.2.3.4"
+        ping_output_1_2_3_4=$(ping 1.2.3.4 | tr -s ' ' | cut -d ' ' -f 8-)
 
-# Create or truncate the output CSV file
-echo "Server, Telnet 80, Telnet 8443, Ping" > $output_file
+        # Command 3: Telnet 1.2.3.4 80
+        echo "Running: Telnet 1.2.3.4 80"
+        telnet_output_80=$(telnet 1.2.3.4 80 | tr -s ' ' | cut -d ' ' -f 2-)
 
-# Read each server from the input file
-while IFS= read -r server; do
-    telnet_80=$(ssh_telnet_server "$server" 80)
-    telnet_8443=$(ssh_telnet_server "$server" 8443)
-    ping_output=$(ssh_ping_server "$server")
-    echo "$server, \"$telnet_80\", \"$telnet_8443\", \"$ping_output\"" >> $output_file
-done < "$input_file"
+        # Command 4: Telnet 1.2.3.4 8443
+        echo "Running: Telnet 1.2.3.4 8443"
+        telnet_output_8443=$(telnet 1.2.3.4 8443 | tr -s ' ' | cut -d ' ' -f 2-)
 
+        printf "%s,%s,%s,%s,%s\n" "$server_ip" "$ping_output_1_1_1_2" "$ping_output_1_2_3_4" "$telnet_output_80" "$telnet_output_8443" >> "$output_file"
+
+EOF
+
+    echo "Commands executed on $server_ip"
+done < "$server_file"
+
+echo "Command output saved in $output_file"
