@@ -1,77 +1,168 @@
 
-Tomcat Auto Start Linux
+Auto Patching Issue Resolution
 
 
 User
-Tomcat sevices auto start on failure on Linux server
+Rewrite the below points 
+Auto patching issue, CIFS, IP not available IP etc issue we faced. Mumtaz created script to address this issue.
+
+⚫ 1 solution Script need to integrate in auto patching job, so precheck and post can take and in case any ko point incident will trigger eg CIFS not mount Ko he incident will trigger. CIFS not Correct.
+
+2 solution, add script in crontab once in week to collect details we will add 2ry script in crontab after reboot log can be logged in longer in case KO point incident will trigger Daniel reply crontab not advisable as crontab managed by orchestration,
+
+Add those script we can minimize the P1, P2 incident like CIFS, NFS not mounted, Iv inactive etc. Mumtaz will share the script to Daniel for testing, Daniel will check possibility to integrate with
+
+patching job
+
+All automation platforms move APP2 NFS on-demand mount work on auto is supported for auto F5 only, CIFS and NFS need always
+
+mounted on servers • Patching kernel Baseline not updating in sulaas Jenkins and Daniel investigating the issue
+
+Discussion on NATED ip on servers, Daniel will check it with Yohan ⚫ Flowing opening request take 2 weeks to complete even the flow not opening.
+
+Legacy infra will retire and move to new infra
+
+Daniel found issue few server FQDN not resolving due to build team failed some were post build job due, installation port required many ports needs to open. FQDN server, post build job failed needs to decom those servers by communicating to app team
+
+Asked to create new request for build the servers.
+
+Daniel will going to create new minimal manual patching process, so can patch the flow issue
+
+server if satellite or sulaas patching failed
+
+1) will try patching on APP if 1" failed will go for 2"
+
+2) Solaas old infrait 2 also failed 3) minimal patching process will get follow
+
+Sulaas Jenkins baseline foxed A
+
++D
+
+Home
+
+-
+
+$
+
+4
+
+%
+
+5
+
+&
+
+7
+
+(
+
+9
+
+6
+
+8
+
+0
+
+E
+
+D
+
+R
+
+F
+
+T
+
+G
+
+Y
+
+U
+
+P
+
+O
+
+H
+
+J
+
+K
+
+L
 
 ChatGPT
-To configure Tomcat services to automatically start on failure on a Linux server, you can follow these general steps:
+We encountered several issues, such as auto patching, CIFS, and unavailable IP. Mumtaz created a script to address these problems.
 
-Open a terminal or SSH into your Linux server.
+⚫ The first solution is to integrate the script into the auto patching job. This way, prechecks and post-checks can be performed, and in case of any incident, such as CIFS not mounting correctly, a trigger will be initiated.
 
-Locate the systemd service unit file for Tomcat. On most Linux distributions, it is typically located in the /etc/systemd/system directory and has a name like tomcat.service or tomcat8.service. You may need root or administrator privileges to access this directory.
+The second solution is to add the script to the crontab once a week to collect details. After a reboot, the logs can be logged for a longer duration, and if any incident occurs, such as a KO point incident, Daniel suggests that crontab is not advisable since it is managed by orchestration.
 
-Open the Tomcat service unit file using a text editor. For example, you can use the nano editor with the command:
+By adding these scripts, we can minimize P1 and P2 incidents like CIFS and NFS not being mounted and IV being inactive. Mumtaz will share the script with Daniel for testing, and he will check the possibility of integrating it with the patching job.
 
-bash
-Copy code
-sudo nano /etc/systemd/system/tomcat.service
-Look for the [Service] section in the file. If it doesn't exist, add it at the end of the file.
+All automation platforms support on-demand mount for APP2 NFS, but only auto F5 is supported. CIFS and NFS need to be always mounted on servers. The kernel baseline is not updating in Sulaas Jenkins, and Daniel is investigating the issue.
 
-Within the [Service] section, add or modify the following lines:
+There is a discussion about NATED IP on servers, and Daniel will check it with Yohan. The opening request for this process takes two weeks to complete, even though the flow is not opening.
 
-makefile
-Copy code
-Restart=on-failure
-RestartSec=5s
-The Restart option specifies when the service should be restarted, and on-failure means it will be restarted only if it fails. The RestartSec option sets a delay of 5 seconds between restart attempts.
+Legacy infrastructure will be retired and moved to the new infrastructure. Daniel discovered that a few servers' FQDNs are not resolving due to a failure in the build team's post-build job. Many ports need to be opened for the installation port to work. The servers with failed post-build jobs and FQDN resolution issues need to be decommissioned by communicating with the app team.
 
-Save the changes and exit the text editor.
+A new request will be created to build the servers.
 
-Reload the systemd configuration to apply the changes:
+Daniel will create a new minimal manual patching process to resolve the flow issue if satellite or Sulaas patching fails. The process will follow these steps:
 
-Copy code
-sudo systemctl daemon-reload
-Enable the Tomcat service to start automatically on boot:
-
-bash
-Copy code
-sudo systemctl enable tomcat
-Start the Tomcat service:
-
-sql
-Copy code
-sudo systemctl start tomcat
-To verify that the service is running and the configuration is correct, you can check the service status:
-
-lua
-Copy code
-sudo systemctl status tomcat
-If everything is configured properly, you should see the service as active (running).
-
-Now, if the Tomcat service fails for any reason, systemd will automatically attempt to restart it.
+Attempt patching on the APP. If it fails, proceed to step 2.
+If patching on Sulaas old infrastructure also fails, proceed to step 3.
+Follow the minimal patching process.
+Sulaas Jenkins baseline is fixed. A, +D, Home, -, $, 4, %, 5, &, 7, (, 9, 6, 8, 0, E, D, R, F, T, G, Y, U, P, O, H, J, K, L.
 
 
 
 
 
 User
-Write mail to asked permission to add Restart=on-failure
-RestartSec=5s
+Write meeting of meeting it
+
+2 / 2
+
 
 ChatGPT
-Subject: Request to Add Restart Configuration for Tomcat Service
+Subject: Meeting Recap - Meeting of Meeting
 
-Dear [Recipient's Name],
+Dear Team,
 
-I hope this email finds you well. I am writing to request your permission to add the restart configuration for the Tomcat service on our Linux server. By implementing this configuration, we can ensure that the Tomcat service automatically restarts in the event of failure, thus minimizing downtime and maintaining service availability.
+I would like to provide a recap of our recent meeting, which was held to discuss the progress and updates regarding our ongoing projects. Below are the key points discussed during the meeting:
 
-The Tomcat service plays a critical role in our server infrastructure, and it is essential to have it promptly recover from any unforeseen issues. Adding the following lines to the Tomcat service unit file will enable the desired functionality:
+Auto Patching Issue and Script Integration:
 
-Restart=on-failure
-RestartSec=5s
+We addressed the auto patching issue and Mumtaz successfully created a script to resolve it.
+It was agreed that the script should be integrated into the auto patching job, allowing for prechecks and post-checks to be performed. This integration will also enable triggering of incidents in case of any critical points (e.g., CIFS not mounting correctly).
+Script Implementation and Logging:
 
-These configuration options will instruct the system to restart the Tomcat service if it fails and introduce a 5-second delay between restart attempts. With this configuration in place, we can proactively address potential disruptions and provide uninterrupted service to our users.
+A decision was made to add the script to the crontab once a week to collect relevant details.
+It was noted that after a reboot, the logs should be logged for an extended duration to capture any incidents, including KO point incidents.
+However, Daniel pointed out that using crontab for this purpose may not be advisable due to orchestration management. He suggested exploring alternative logging methods.
+Incident Minimization and Script Sharing:
 
-I kindly request your approval to implement this change. Please let me know if you have any concerns or if there are any specific guidelines or procedures I should follow regarding service configurations on our Linux server.
+We discussed the potential benefits of implementing the scripts, specifically in reducing P1 and P2 incidents related to CIFS, NFS, and inactive IV.
+Mumtaz will share the script with Daniel for testing, and he will assess the feasibility of integrating it with the patching job.
+Automation Platforms and Infrastructure:
+
+It was highlighted that all automation platforms support on-demand mount for APP2 NFS, but only auto F5 is supported.
+CIFS and NFS should be consistently mounted on servers.
+Additionally, the issue of the kernel baseline not updating in Sulaas Jenkins was raised, and Daniel is currently investigating this matter.
+NATED IP, Flow Opening Request, and Legacy Infrastructure:
+
+Daniel will communicate with Yohan regarding NATED IP on servers to address any potential concerns.
+The flow opening request, which currently takes two weeks to complete despite the flow not opening, was discussed. Further analysis and improvements are required in this area.
+We acknowledged that legacy infrastructure will be phased out and transitioned to the new infrastructure.
+FQDN Resolution, Post-Build Jobs, and Server Decommissioning:
+
+Daniel identified a problem where a few servers' FQDNs were not resolving due to post-build job failures by the build team.
+To rectify this, the affected servers need to be decommissioned after communicating with the app team.
+New server build requests will be initiated to address this issue.
+Minimal Manual Patching Process:
+
+Daniel proposed the creation of a new minimal manual patching process to tackle flow issues in case satellite or Sulaas patching fails.
+The process will follow a series of steps, starting with patching attempts on the APP and progressing to other measures if necessary.
+Please review the above points and provide any additional input or clarifications if needed. Let's continue our collaboration to ensure smooth progress on our projects.
