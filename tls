@@ -1,3 +1,5 @@
+hostname
+
 $protocols = @("SSL 2.0", "SSL 3.0", "TLS 1.0", "TLS 1.1", "TLS 1.2", "TLS 1.3")
 $basePath = "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols"
 
@@ -8,5 +10,5 @@ foreach ($protocol in $protocols) {
     $serverEnabled = (Get-ItemProperty -Path $serverKey -Name Enabled -ErrorAction SilentlyContinue).Enabled
     $clientEnabled = (Get-ItemProperty -Path $clientKey -Name Enabled -ErrorAction SilentlyContinue).Enabled
 
-    Write-Host "$protocol:`n  Server Enabled: $serverEnabled`n  Client Enabled: $clientEnabled`n"
+    Write-Host "$protocol :`n  Server Enabled: $serverEnabled`n  Client Enabled: $clientEnabled`n"
 }
