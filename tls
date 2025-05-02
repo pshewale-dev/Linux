@@ -1,0 +1,12 @@
+$tlsProtocols = @("TLS 1.0", "TLS 1.1", "TLS 1.2", "TLS 1.3")
+$basePath = "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols"
+
+foreach ($protocol in $tlsProtocols) {
+    $serverKey = "$basePath\$protocol\Server"
+    $clientKey = "$basePath\$protocol\Client"
+
+    $serverEnabled = Get-ItemProperty -Path $serverKey -Name Enabled -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Enabled
+    $clientEnabled = Get-ItemProperty -Path $clientKey -Name Enabled -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Enabled
+
+    Write-Host "$protocol:`n  Server Enabled: $serverEnabled`n  Client Enabled: $clientEnabled`n"
+}
