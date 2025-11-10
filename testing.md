@@ -1,19 +1,12 @@
-Excellent, Prashant 👏 — that’s strong, measurable contribution across two projects (Eneco and Gutor), covering Linux operations, patching, vulnerability management, and daily business-as-usual (BAU) tasks.
-
-Here’s a refined, ready-to-paste version of your Year-End Review 2025 self-comments — tailored exactly for your role as Linux L2 & Azure DevOps Engineer, reflecting your dual-project responsibilities and achievements.
+Excellent ✅ — here’s a short, powerful, and impactful version of your Year-End Review 2025 self-comments, optimized for SuccessFactors (under 900–1000 characters each).
+It keeps all key achievements — Eneco migration, Rapid7 fixes (50%), Gutor infra management, BAU, leadership, and team support — but in a concise, professional tone 👇
 
 
 ---
 
 🟩 Overall Comments on Priorities
 
-> During this year, I effectively managed responsibilities across two key projects — Eneco and Gutor.
-
-In the Eneco project, I contributed to the migration activities and played an active role in Rapid7 vulnerability remediation, successfully resolving around 50 identified vulnerabilities, with another 50 pending due to application dependencies. I ensured all fixes were implemented following security compliance and change management guidelines.
-
-In the Gutor project, I independently managed the entire Linux infrastructure, including patching, daily operational tasks, and implementing security best practices across servers. I ensured system stability, adherence to defined SLAs, and continuous monitoring for performance and compliance.
-
-I consistently prioritized operational excellence, timely completion of change requests, and proactive issue resolution to maintain service reliability across both environments.
+> Successfully managed responsibilities across Eneco and Gutor projects. In Eneco, contributed to migration activities and Rapid7 vulnerability remediation, fixing around 50% of issues while pending ones await application support. Actively assisted Eneco team members in resolving technical challenges. In Gutor, independently handled Linux infrastructure, including patching, operations, and security compliance, ensuring high uptime and smooth BAU execution.
 
 
 
@@ -22,15 +15,13 @@ I consistently prioritized operational excellence, timely completion of change r
 
 🟩 Overall Comments on Skills Maturity
 
-Employee Comment: What is the level of contribution this year?
-
-> My contribution this year was impactful in both project delivery and operational maintenance. I played a critical role in enhancing server security, applying patches, performing vulnerability remediation, and supporting migration activities. I also handled daily BAU operations such as server monitoring, troubleshooting, and performance tuning for multiple environments. My proactive approach helped minimize incidents and strengthen infrastructure reliability.
+> Delivered strong contributions across both Linux and Windows environments through effective patching, migration, and vulnerability management. Demonstrated technical depth, process discipline, and problem-solving ability. Provided consistent support and guidance to team members, helping resolve issues efficiently and ensuring operational stability.
 
 
 
-Employee Comment: What level of leadership skills maturity is being demonstrated?
+Leadership Maturity
 
-> I demonstrated leadership maturity by managing the Gutor Linux environment independently, taking ownership of issues from identification to resolution, and ensuring consistent communication with stakeholders. I provided timely updates on vulnerability management and migration progress in Eneco and collaborated effectively with application and security teams. My ability to balance multiple priorities, maintain documentation, and follow security best practices reflects accountability and professional discipline aligned with team goals.
+> Showed leadership by managing Gutor Linux servers independently and mentoring teammates in both Linux and Windows troubleshooting. Shared best practices, supported Eneco members, and promoted teamwork and knowledge sharing to enhance overall delivery quality.
 
 
 
@@ -39,13 +30,11 @@ Employee Comment: What level of leadership skills maturity is being demonstrated
 
 🟩 Overall Comments on In-Year Contribution
 
-> This year, I contributed significantly to both Eneco and Gutor projects by ensuring operational stability, patch compliance, and vulnerability closure within defined timelines. I continuously followed up with application teams to complete pending security actions and implemented preventive controls to minimize recurring issues.
-
-My commitment to operational excellence and ownership of end-to-end Linux support helped strengthen both projects’ overall infrastructure posture. Moving forward, I aim to enhance my skills further in Azure automation, scripting, and DevOps process integration to deliver more scalable and secure infrastructure solutions.
+> Made impactful contributions to Eneco and Gutor through proactive operations, Rapid7 remediation (50% fixed), and end-to-end patch management. Supported BAU tasks, ensured compliance, and assisted team members with technical challenges. Demonstrated ownership, collaboration, and focus on improving efficiency and reliability. Plan to strengthen expertise in Azure DevOps automation and scripting for further operational excellence.
 
 
 
 
 ---
 
-Would you like me to make this version shorter for quick entry into SuccessFactors text boxes (under 1000 characters each), or keep it in this detailed format for a strong impact in your final submission?
+Would you like me to make a one-line “highlight summary” version for each section too (for quick bullet use or short-form reviews)?
